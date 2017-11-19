@@ -59,9 +59,7 @@ public class MainActivity extends CustomActivity {
 
         initElement();
 //        initData();
-        if(mDatas.size() != 0) {
-            initRecyclerView();
-        }
+        initRecyclerView();
 
     }
 
@@ -119,6 +117,7 @@ public class MainActivity extends CustomActivity {
             } else {
                 Glide.with(this).load(R.drawable.empty).into(iv_empty);
             }
+
 
             return;
         }
