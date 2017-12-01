@@ -1,6 +1,7 @@
 package younkyulee.android.com.nosports;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class IntroActivity extends CustomActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_intro);
 
 
@@ -65,16 +67,7 @@ public class IntroActivity extends CustomActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Match");
 
-        if(mDatas.size() != 0) {
-            new Handler().postDelayed(new Runnable(){
-                @Override
-                public void run() {
-                /* 메뉴액티비티를 실행하고 로딩화면을 죽인다.*/
-                    goNext();
-                }
-            }, SPLASHTIME);
-        }
-
+        mDatas.clear();
 
         mValueEventListener = new ValueEventListener() {
             @Override
