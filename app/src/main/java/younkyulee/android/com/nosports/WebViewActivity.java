@@ -34,5 +34,12 @@ public class WebViewActivity extends AppCompatActivity {
         wv.loadUrl(url);
 
     }
+    
+    private class MyWebViewClient extend WebViewClient {
+        @Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            //TODO : implement...
+        }
+    }
 
 }
