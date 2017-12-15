@@ -32,6 +32,8 @@ public class IntroActivity extends CustomActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ValueEventListener mValueEventListener;
+    private DatabaseReference isFix;
+    public static boolean isFixed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class IntroActivity extends CustomActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Match");
 
+
         mDatas.clear();
 
         mValueEventListener = new ValueEventListener() {
@@ -99,6 +102,25 @@ public class IntroActivity extends CustomActivity {
     }
 
     public void goNext() {
+
+        isFix = mFirebaseDatabase.getReference("isFix");
+        isFix.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue().toString().equals("true")){
+                    isFixed = true;
+                }
+                goNextPage();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                goNextPage();
+            }
+        });
+    }
+
+    public void goNextPage() {
         Intent mainIntent = new Intent(IntroActivity.this,MainActivity.class);
         IntroActivity.this.startActivity(mainIntent);
         IntroActivity.this.finish();

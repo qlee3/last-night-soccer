@@ -16,6 +16,15 @@ public class Match {
     private String matchLabel;
     private String matchRound;
     private String hit;
+    private String ntime;
+
+    public String getNtime() {
+        return ntime;
+    }
+
+    public void setNtime(String ntime) {
+        this.ntime = ntime;
+    }
 
     public String getAwayTeamCode() {
         return awayTeamCode;

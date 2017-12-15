@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static younkyulee.android.com.nosports.IntroActivity.isFixed;
 import static younkyulee.android.com.nosports.IntroActivity.mDatas;
 
 public class MainActivity extends CustomActivity {
@@ -58,6 +59,7 @@ public class MainActivity extends CustomActivity {
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
 
+
         initElement();
 //        initData();
         initRecyclerView();
@@ -71,7 +73,6 @@ public class MainActivity extends CustomActivity {
     private void initData() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Match");
-
 
         mValueEventListener = new ValueEventListener() {
             @Override
@@ -97,6 +98,25 @@ public class MainActivity extends CustomActivity {
     private void initRecyclerView() {
 
         RecyclerView rv_match_list = (RecyclerView) findViewById(R.id.rv_match_list);
+
+        if(isFixed) {
+
+            rv_match_list.setVisibility(View.GONE);
+            fm_empty = (FrameLayout)findViewById(R.id.fm_empty);
+            iv_empty = (ImageView)findViewById(R.id.iv_empty);
+            fm_empty.setVisibility(View.VISIBLE);
+
+            DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
+            int width = dm.widthPixels;
+            int height = dm.heightPixels;
+            if((double) width / height < (double) 1440 / 2392) {
+                Glide.with(this).load(R.drawable.fix_long).into(iv_empty);
+            } else {
+                Glide.with(this).load(R.drawable.fix).into(iv_empty);
+            }
+
+            return;
+        }
 
         if(mDatas.size() <= 0) {
 

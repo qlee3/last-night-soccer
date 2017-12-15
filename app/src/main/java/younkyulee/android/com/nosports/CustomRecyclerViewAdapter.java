@@ -56,6 +56,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         holder.tv_home_team.setText(match.getHomeTeam() + "");
         holder.tv_away_team.setText(match.getAwayTeam() + "");
         final String url = match.getMatchUrl();
+        final String three_url = match.getNtime();
 
         holder.tv_match_label.setText(match.getMatchLabel() + " " + match.getMatchRound());
         holder.tv_match_time.setText(match.getMatchTime());
@@ -74,12 +75,9 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
         }
 
-
         holder.img_hihighlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 mTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("경기별")
                         .setAction(match.getHomeTeam()+" vs "+match.getAwayTeam())
@@ -101,9 +99,43 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
                 intent = new Intent(context,WebViewActivity.class);
                 intent.putExtra("url",url);
                 v.getContext().startActivity(intent);
-
             }
         });
+
+        if(three_url == null) {
+            Glide.with(context).load(R.drawable.min_btn_inactive_3).into(holder.img_hihighlight_three);
+            holder.img_hihighlight_three.setClickable(false);
+        }else {
+            Glide.with(context).load(R.drawable.min_btn_active_3).into(holder.img_hihighlight_three);
+            holder.img_hihighlight_three.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("팀별")
+                            .setAction(match.getHomeTeam())
+                            .setLabel(String.valueOf(position))
+                            .build());
+
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("팀별")
+                            .setAction(match.getAwayTeam())
+                            .setLabel(String.valueOf(position))
+                            .build());
+
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("3분 팀별")
+                            .setAction(match.getHomeTeam()+" vs "+match.getAwayTeam())
+                            .build());
+
+                    intent = new Intent(context,WebViewActivity.class);
+                    intent.putExtra("url",three_url);
+                    v.getContext().startActivity(intent);
+
+                }
+            });
+        }
+
     }
 
     // 데이터 총개수;
@@ -117,7 +149,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
 
         TextView tv_home_team,tv_away_team,tv_match_time,tv_match_label;
         CardView cd;
-        ImageView iv_home,iv_away,img_hihighlight,iv_medal;
+        ImageView iv_home,iv_away,img_hihighlight,iv_medal,img_hihighlight_three;
         String url;
 
         public CustomViewHolder(View itemView) {
@@ -132,6 +164,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             iv_home = (ImageView)itemView.findViewById(R.id.iv_home);
             iv_away = (ImageView)itemView.findViewById(R.id.iv_away);
             img_hihighlight = (ImageView)itemView.findViewById(R.id.img_hihighlight);
+            img_hihighlight_three = (ImageView)itemView.findViewById(R.id.img_hihighlight_three);
             cd = (CardView) itemView.findViewById(R.id.vursurs_card);
         }
 
