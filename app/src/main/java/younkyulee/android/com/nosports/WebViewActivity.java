@@ -49,7 +49,7 @@ public class WebViewActivity extends AppCompatActivity {
         int SCREEN_HEIGHT=dmath.heightPixels;
 
         wv = (WebView)findViewById(R.id.wb);
-        WebSettings settings = webView.getSettings();
+        WebSettings settings = wv.getSettings();
 
         settings.setPluginState(WebSettings.PluginState.ON);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
