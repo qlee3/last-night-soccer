@@ -49,21 +49,21 @@ public class WebViewActivity extends AppCompatActivity {
         int SCREEN_HEIGHT=dmath.heightPixels;
 
         wv = (WebView)findViewById(R.id.wb);
+        WebSettings settings = wv.getSettings();
 
-
-        wv.getSettings().setPluginState(WebSettings.PluginState.ON);
-        wv.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        wv.getSettings().setSupportMultipleWindows(true);
+        settings.setPluginState(WebSettings.PluginState.ON);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setSupportMultipleWindows(true);
         Log.w("----------------",wv.getSettings().getUserAgentString());
-        wv.getSettings().setAppCacheEnabled(true);
-        wv.getSettings().setJavaScriptEnabled(true);
+        settings.setAppCacheEnabled(true);
+        settings.setJavaScriptEnabled(true);
         String hi = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
         String hi2 = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36";
-        wv.getSettings().setUserAgentString(hi);
+        settings.setUserAgentString(hi);
         // 줌사용
-        wv.getSettings().setAllowContentAccess(true);
-        wv.getSettings().setSupportZoom(true);
-        wv.getSettings().setBuiltInZoomControls(true);
+        settings.setAllowContentAccess(true);
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
 
 
 
