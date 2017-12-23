@@ -2,6 +2,8 @@ package younkyulee.android.com.nosports;
 
 /**
  * Created by Younkyu on 2017-11-18.
+ * 폰트 설정
+ * 트래커설정
  */
 
 import android.app.Application;
@@ -10,11 +12,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.tsengvn.typekit.Typekit;
 
-/**
- * This is a subclass of {@link Application} used to provide shared objects for this app, such as
- * the {@link Tracker}.
- */
-public class AnalyticsApplication extends Application {
+public class LaNaSaApplication extends Application {
 
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
@@ -32,6 +30,7 @@ public class AnalyticsApplication extends Application {
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
+     *
      * @return tracker
      */
     synchronized public Tracker getDefaultTracker() {

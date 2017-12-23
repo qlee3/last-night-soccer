@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 /**
  * Created by Younkyu on 2017-11-26.
+ * 영상을 볼 수 있는 custom 웹 크롬 클라이언트
  */
 
 public class CustomWebChromeClient extends WebChromeClient {

@@ -27,7 +27,6 @@ public class IntroActivity extends CustomActivity {
     private final int SPLASHTIME = 1000;
     private ImageView iv;
 
-
     public static ArrayList<Match> mDatas = new ArrayList<>();
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -38,20 +37,38 @@ public class IntroActivity extends CustomActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUi();
+        init();
+        setListener();
+
+    }
+
+    private void init() {
+        // firebase 연결
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference("Match");
+
+        //데이터 초기화
+        mDatas.clear();
+    }
+
+    //Ui 설정
+    private void setUi() {
+        // 가로로 안 뉘어지도록 설정
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_intro);
 
-
-        iv = (ImageView)findViewById(R.id.iv_randing);
+        // 랜딩이미지 디바이스별 크기 조절
+        iv = (ImageView) findViewById(R.id.iv_randing);
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        if((double) width / height < (double) 1440 / 2392) {
+        if ((double) width / height < (double) 1440 / 2392) {
             Glide.with(this).load(R.drawable.landing_long).into(iv);
         }
 
-
+        //전체 화면 설정
         int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
         int newUiOptions = uiOptions;
         boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
@@ -65,49 +82,55 @@ public class IntroActivity extends CustomActivity {
         newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
         newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference("Match");
+    }
 
 
-        mDatas.clear();
+    private void setListener() {
 
+        //이벤트 리스터 생성
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Match match = postSnapshot.getValue(Match.class);
-                    mDatas.add(match);
-                };
-                Collections.sort(mDatas, new MatchHitComparator());
-                goNext();
+                //데이터 존재 여부 확인
+                if (dataSnapshot.exists() || dataSnapshot.hasChildren()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Match match = postSnapshot.getValue(Match.class);
+                        //크롤링 실패하여 이상한 데이터가 들어온 경우 예외 처리
+                        if (match.getMatchUrl() != null) {
+                            mDatas.add(match);
+                        }
+                    }
+                    ;
+                    //데이터 정렬
+                    Collections.sort(mDatas, new MatchHitComparator());
+                }
+                isFixed();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                goNext();
+                isFixed();
             }
         };
 
-        mDatabaseReference.addValueEventListener(mValueEventListener);
-
+        mDatabaseReference.addListenerForSingleValueEvent(mValueEventListener);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mValueEventListener != null) {
+        if (mValueEventListener != null) {
             mDatabaseReference.removeEventListener(mValueEventListener);
         }
     }
 
-    public void goNext() {
-
+    public void isFixed() {
+        //현재 서버점검 모드인지 확인
         isFix = mFirebaseDatabase.getReference("isFix");
         isFix.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue().toString().equals("true")){
+                if (dataSnapshot.getValue().toString().equals("true")) {
                     isFixed = true;
                 }
                 goNextPage();
@@ -121,12 +144,12 @@ public class IntroActivity extends CustomActivity {
     }
 
     public void goNextPage() {
-        Intent mainIntent = new Intent(IntroActivity.this,MainActivity.class);
+        Intent mainIntent = new Intent(IntroActivity.this, MainActivity.class);
         IntroActivity.this.startActivity(mainIntent);
         IntroActivity.this.finish();
     }
 
-
+    //데이터 조회수 순 정렬
     class MatchHitComparator implements Comparator<Match> {
         @Override
         public int compare(Match o1, Match o2) {

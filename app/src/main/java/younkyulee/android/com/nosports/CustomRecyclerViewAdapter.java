@@ -23,6 +23,7 @@ import java.util.Set;
 
 /**
  * Created by Younkyu on 2017-11-04.
+ * 커스텀 리사이클러뷰
  */
 
 public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.CustomViewHolder> {
@@ -236,7 +237,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
             case "2759" : Glide.with(context).load(R.drawable.benevento_calcio).into(iv); break;
             case "26371" : Glide.with(context).load(R.drawable.bologna).into(iv); break;
             case "12345" : Glide.with(context).load(R.drawable.sassuolo_calcio).into(iv); break;
-
+            default: Glide.with(context).load(R.mipmap.ic_launcher).into(iv); break;
 
         }
 

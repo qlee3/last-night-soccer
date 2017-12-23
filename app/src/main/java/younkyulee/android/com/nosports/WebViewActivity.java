@@ -24,56 +24,59 @@ import java.net.URISyntaxException;
 
 public class WebViewActivity extends AppCompatActivity {
 
-    ConstraintLayout ct;
     WebView wv;
+    WebSettings settings;
     Intent intent;
     String url;
-    Button btn;
-    private WindowManager.LayoutParams params;
+    WindowManager.LayoutParams params;
+    int SCREEN_WIDTH;
+    int SCREEN_HEIGHT;
+    String mobileHeader = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-        params = getWindow().getAttributes();
 
+        init();
+        setWv(wv);
+
+    }
+
+    private void init() {
+
+        //화면 사이즈를 영상 view에 보내기, 현재 사용하지 않고 있음
+        params = getWindow().getAttributes();
+        DisplayMetrics dmath = this.getResources().getDisplayMetrics();    // 화면의 가로,세로 길이를 구할 때 사용합니다.
+        SCREEN_WIDTH = dmath.widthPixels;
+        SCREEN_HEIGHT = dmath.heightPixels;
+
+        //영상 url 받기
         intent = getIntent();
         url = intent.getExtras().getString("url");
 
-        ct = (ConstraintLayout)findViewById(R.id.ct);
+        wv = (WebView) findViewById(R.id.wb);
 
-        DisplayMetrics dmath=this.getResources().getDisplayMetrics();	// 화면의 가로,세로 길이를 구할 때 사용합니다.
+    }
 
-        int SCREEN_WIDTH=dmath.widthPixels;
-        int SCREEN_HEIGHT=dmath.heightPixels;
+    private void setWv(final WebView wv) {
 
-        wv = (WebView)findViewById(R.id.wb);
-        WebSettings settings = wv.getSettings();
+        settings = wv.getSettings();
 
         settings.setPluginState(WebSettings.PluginState.ON);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setSupportMultipleWindows(true);
-        Log.w("----------------",wv.getSettings().getUserAgentString());
         settings.setAppCacheEnabled(true);
         settings.setJavaScriptEnabled(true);
-        String hi = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
-        String hi2 = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36";
-        settings.setUserAgentString(hi);
+        settings.setUserAgentString(mobileHeader);
+
         // 줌사용
         settings.setAllowContentAccess(true);
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
 
-
-
-
-        //3. 웹뷰 클라이언트를 지정(안하면 내장 웹브라우저가 팝업된다.)
-        // wv.setWebChromeClient(new WebChromeClient());
-//        wv.setWebViewClient(new WebViewClient());
-        // 3.1 http 등을 처리하기 위한 핸들러~ : 프로토콜에 따라 클라이언트가선택되는 것으로 파악됨..
-//        wv.setWebChromeClient(new WebChromeClient());
-
+        //웹뷰 naverApp 연결 딥링크 관련 세팅
         wv.setWebViewClient(new WebViewClient() {
 
             @SuppressWarnings("deprecation")
@@ -103,11 +106,11 @@ public class WebViewActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             Intent marketIntent = new Intent(Intent.ACTION_VIEW);
-                            marketIntent.setData(Uri.parse("market://details?id="+intent.getPackage()));
+                            marketIntent.setData(Uri.parse("market://details?id=" + intent.getPackage()));
                             startActivity(marketIntent);
                         }
                         return true;
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (url != null && url.startsWith("market://")) {
@@ -126,10 +129,10 @@ public class WebViewActivity extends AppCompatActivity {
 
             }
         });
-        wv.setWebChromeClient(new CustomWebChromeClient(this,SCREEN_HEIGHT,SCREEN_WIDTH));
+        wv.setWebChromeClient(new CustomWebChromeClient(this, SCREEN_HEIGHT, SCREEN_WIDTH));
 
         wv.loadUrl(url);
-
     }
+
 
 }
