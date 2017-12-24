@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.HitBuilders;
@@ -18,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,11 +31,12 @@ import static younkyulee.android.com.nosports.IntroActivity.mDatas;
 
 public class MainActivity extends CustomActivity {
 
-    CustomRecyclerView rv_match_list;
+    RecyclerView rv_match_list;
     LinearLayout li;
     ImageView iv_empty;
     FrameLayout fm_empty;
     Tracker mTracker;
+    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +54,13 @@ public class MainActivity extends CustomActivity {
 
     private void initElement() {
         li = (LinearLayout) findViewById(R.id.li_main);
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+
     }
 
     private void initRecyclerView() {
 
-        RecyclerView rv_match_list = (RecyclerView) findViewById(R.id.rv_match_list);
+        rv_match_list = (RecyclerView) findViewById(R.id.rv_match_list);
 
         if (isFixed) {
 
@@ -101,7 +107,7 @@ public class MainActivity extends CustomActivity {
         }
 
         //2. 아답터생성하기
-        CustomRecyclerViewAdapter rca = new CustomRecyclerViewAdapter(mDatas, R.layout.vursurs_card, mTracker);
+        CustomRecyclerViewAdapter rca = new CustomRecyclerViewAdapter(mDatas, R.layout.vursurs_card, mTracker, mStorageRef);
 
         //3. 리사이클러 뷰에 아답터 세팅하기
         rv_match_list.setAdapter(rca);

@@ -162,8 +162,7 @@
                 <ImageView
                     android:id="@+id/iv_away"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                    android:layout_height="match_parent" />
             </FrameLayout>
 
             <TextView
@@ -193,8 +192,7 @@
                 <ImageView
                     android:id="@+id/iv_home"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                    android:layout_height="match_parent" />
 
             </FrameLayout>
 

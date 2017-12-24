@@ -3,6 +3,7 @@ package younkyulee.android.com.nosports;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -11,11 +12,15 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,7 +52,6 @@ public class IntroActivity extends CustomActivity {
         // firebase 연결
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Match");
-
         //데이터 초기화
         mDatas.clear();
     }
@@ -94,7 +98,7 @@ public class IntroActivity extends CustomActivity {
                 //데이터 존재 여부 확인
                 if (dataSnapshot.exists() || dataSnapshot.hasChildren()) {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Match match = postSnapshot.getValue(Match.class);
+                        final Match match = postSnapshot.getValue(Match.class);
                         //크롤링 실패하여 이상한 데이터가 들어온 경우 예외 처리
                         if (match.getMatchUrl() != null) {
                             mDatas.add(match);

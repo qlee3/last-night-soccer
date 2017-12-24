@@ -1,0 +1,272 @@
+//package younkyulee.android.com.nosports;
+//
+//import android.content.Context;
+//import android.content.Intent;
+//import android.net.Uri;
+//import android.support.annotation.NonNull;
+//import android.support.v7.widget.CardView;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.BaseAdapter;
+//import android.widget.ImageView;
+//import android.widget.TextView;
+//
+//import com.bumptech.glide.Glide;
+//import com.google.android.gms.analytics.HitBuilders;
+//import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.tasks.OnFailureListener;
+//import com.google.android.gms.tasks.OnSuccessListener;
+//import com.google.firebase.storage.StorageReference;
+//
+//import java.util.ArrayList;
+//
+///**
+// * Created by Younkyu on 2017-12-24.
+// */
+//
+//public class CustomListViewAdapter extends BaseAdapter {
+//
+//    ArrayList<Match> datas = new ArrayList<Match>();
+//    // 리스트 각 행에서 사용되는 레이아웃 xml의 아이디
+//    int itemLayout;
+//    Context context;
+//    Intent intent;
+//    Tracker mTracker;
+//    private StorageReference mStorageRef;
+//
+//    public CustomListViewAdapter(Context context,ArrayList<Match> datas, int itemLayout, Tracker mTracker, StorageReference mStorageRef ) {
+//        this.datas = datas;
+//        this.context = context;
+//        this.itemLayout = itemLayout;
+//        this.mTracker = mTracker;
+//        this.mStorageRef = mStorageRef;
+//    }
+//
+//    @Override
+//    public int getCount() {
+//        return datas.size();
+//    }
+//
+//    @Override
+//    public Object getItem(int position) {
+//        return datas.get(position);
+//    }
+//
+//    @Override
+//    public long getItemId(int position) {
+//        return position;
+//    }
+//
+//    public void imageSetFromStorage(String teamCode, final ImageView iv) {
+//        String imageName = "teamLogo/"+teamCode+".png";
+//
+//        mStorageRef.child(imageName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                Glide.with(context).load(uri).into(iv);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//            }
+//        });
+//    }
+//
+//
+//    @Override
+//    public View getView(final int position, View convertView, ViewGroup parent) {
+//
+//        View v = convertView;
+//        TextView tv_home_team,tv_away_team,tv_match_time,tv_match_label;
+//        CardView cd;
+//        final ImageView iv_home,iv_away,img_hihighlight,iv_medal,img_hihighlight_three;
+//        final String url;
+//        final String three_url;
+//
+//
+//        if (v == null) {
+//            LayoutInflater vi;
+//            vi = LayoutInflater.from(context);
+//            v = vi.inflate(itemLayout, null);
+//        }
+//
+//        iv_medal = (ImageView)v.findViewById(R.id.iv_medal);
+//        tv_home_team = (TextView) v.findViewById(R.id.tv_home_team);
+//        tv_away_team = (TextView) v.findViewById(R.id.tv_away_team);
+//        tv_match_time = (TextView) v.findViewById(R.id.tv_match_time);
+//        tv_match_label = (TextView) v.findViewById(R.id.tv_match_label);
+//        iv_home = (ImageView)v.findViewById(R.id.iv_home);
+//        iv_away = (ImageView)v.findViewById(R.id.iv_away);
+//        img_hihighlight = (ImageView)v.findViewById(R.id.img_hihighlight);
+//        img_hihighlight_three = (ImageView)v.findViewById(R.id.img_hihighlight_three);
+//        cd = (CardView) v.findViewById(R.id.vursurs_card);
+//
+//        final Match match = datas.get(position);
+//
+//
+//        if (match != null) {
+//
+//            tv_home_team.setText(match.getHomeTeam() + "");
+//            tv_away_team.setText(match.getAwayTeam() + "");
+//            url = match.getMatchUrl();
+//            three_url = match.getNtime();
+//
+//            tv_match_label.setText(match.getMatchLabel() + " " + match.getMatchRound());
+//            tv_match_time.setText(match.getMatchTime());
+////
+//
+//            imageSetFromStorage(match.getHomeTeamCode(), iv_home);
+//            imageSetFromStorage(match.getAwayTeamCode(), iv_away);
+//
+//
+//            iv_medal.setVisibility(View.INVISIBLE);
+//            if(position < 3) {
+//                iv_medal.setVisibility(View.VISIBLE);
+//                switch (position) {
+//                    case 0 : Glide.with(context).load(R.drawable.medal_gold).into(iv_medal); break;
+//                    case 1 : Glide.with(context).load(R.drawable.medal_silver).into(iv_medal); break;
+//                    case 2 : Glide.with(context).load(R.drawable.medal_bronze).into(iv_medal); break;
+//
+//                }
+//
+//            }
+//
+//            img_hihighlight.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mTracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("경기별")
+//                            .setAction(match.getHomeTeam()+" vs "+match.getAwayTeam())
+//                            .setLabel(String.valueOf(position))
+//                            .build());
+//
+//                    mTracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("팀별")
+//                            .setAction(match.getHomeTeam())
+//                            .setLabel(String.valueOf(position))
+//                            .build());
+//
+//                    mTracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("팀별")
+//                            .setAction(match.getAwayTeam())
+//                            .setLabel(String.valueOf(position))
+//                            .build());
+//
+//                    intent = new Intent(context,WebViewActivity.class);
+//                    intent.putExtra("url",url);
+//                    v.getContext().startActivity(intent);
+//                }
+//            });
+//
+//            if(three_url == null) {
+//                Glide.with(context).load(R.drawable.min_btn_inactive_3).into(img_hihighlight_three);
+//                img_hihighlight_three.setClickable(false);
+//            }else {
+//                Glide.with(context).load(R.drawable.min_btn_active_3).into(img_hihighlight_three);
+//                img_hihighlight_three.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                        mTracker.send(new HitBuilders.EventBuilder()
+//                                .setCategory("팀별")
+//                                .setAction(match.getHomeTeam())
+//                                .setLabel(String.valueOf(position))
+//                                .build());
+//
+//                        mTracker.send(new HitBuilders.EventBuilder()
+//                                .setCategory("팀별")
+//                                .setAction(match.getAwayTeam())
+//                                .setLabel(String.valueOf(position))
+//                                .build());
+//
+//                        mTracker.send(new HitBuilders.EventBuilder()
+//                                .setCategory("3분 팀별")
+//                                .setAction(match.getHomeTeam()+" vs "+match.getAwayTeam())
+//                                .build());
+//
+//                        intent = new Intent(context,WebViewActivity.class);
+//                        intent.putExtra("url",three_url);
+//                        v.getContext().startActivity(intent);
+//
+//                    }
+//                });
+//            }
+//        }
+//
+//        return v;
+//    }
+//
+//    public void imgSetter(String teamCode, ImageView iv) {
+//
+//        switch (teamCode) {
+//            case "4" : Glide.with(context).load(R.drawable.chelsea).into(iv); break;
+//            case "23" : Glide.with(context).load(R.drawable.bournemouth).into(iv); break;
+//            case "43" : Glide.with(context).load(R.drawable.westham_united).into(iv); break;
+//            case "5" : Glide.with(context).load(R.drawable.crystal_palace).into(iv); break;
+//            case "38" : Glide.with(context).load(R.drawable.stoke_city).into(iv); break;
+//            case "41" : Glide.with(context).load(R.drawable.watford).into(iv); break;
+//            case "8" : Glide.with(context).load(R.drawable.everton).into(iv); break;
+//            case "29" : Glide.with(context).load(R.drawable.leicester_city).into(iv); break;
+//            case "18" : Glide.with(context).load(R.drawable.southampton).into(iv); break;
+//            case "6795" : Glide.with(context).load(R.drawable.brighton_hove_albion).into(iv); break;
+//            case "31" : Glide.with(context).load(R.drawable.newcastle_united).into(iv); break;
+//            case "70" : Glide.with(context).load(R.drawable.burnley).into(iv); break;
+//            case "65" : Glide.with(context).load(R.drawable.swansea_city).into(iv); break;
+//            case "9" : Glide.with(context).load(R.drawable.liverpool).into(iv); break;
+//            case "12" : Glide.with(context).load(R.drawable.manchester_united).into(iv); break;
+//            case "1006" : Glide.with(context).load(R.drawable.arsenal).into(iv); break;
+//            case "11" : Glide.with(context).load(R.drawable.manchester_city).into(iv); break;
+//            case "42" : Glide.with(context).load(R.drawable.west_bromwich_albion).into(iv); break; //웨스트브롬
+//            case "56" : Glide.with(context).load(R.drawable.huddersfield_town).into(iv); break;
+//            case "19" : Glide.with(context).load(R.drawable.tottenham_hotspur).into(iv); break;
+//
+//            case "38295" : Glide.with(context).load(R.drawable.villarreal).into(iv); break;
+//            case "26305" : Glide.with(context).load(R.drawable.atletico_madrid).into(iv); break;
+//            case "26300" : Glide.with(context).load(R.drawable.barcelona).into(iv); break;
+//            case "26313" : Glide.with(context).load(R.drawable.athletic_bilbao).into(iv); break;
+//            case "26303" : Glide.with(context).load(R.drawable.real_madrid).into(iv); break;
+//            case "27832" : Glide.with(context).load(R.drawable.girona).into(iv); break;
+//            case "37454" : Glide.with(context).load(R.drawable.levante).into(iv); break;
+//            case "37452" : Glide.with(context).load(R.drawable.eibar).into(iv); break;
+//            case "26308" : Glide.with(context).load(R.drawable.real_sociedad).into(iv); break;
+//            case "37459" : Glide.with(context).load(R.drawable.getafe).into(iv); break;
+//            case "26302" : Glide.with(context).load(R.drawable.celta_de_vigo).into(iv); break;
+//            case "27826" : Glide.with(context).load(R.drawable.malaga).into(iv); break;
+//            case "27812" : Glide.with(context).load(R.drawable.leganes).into(iv); break;
+//            case "27821" : Glide.with(context).load(R.drawable.sevilla).into(iv); break;
+//            case "26309" : Glide.with(context).load(R.drawable.deportivo_la_coruna).into(iv); break;
+//            case "27804" : Glide.with(context).load(R.drawable.las_palmas).into(iv); break;
+//            case "26316" : Glide.with(context).load(R.drawable.valencia).into(iv); break;
+//            case "26314" : Glide.with(context).load(R.drawable.real_betis).into(iv); break;
+//            case "26476" : Glide.with(context).load(R.drawable.deportivo_alaves).into(iv); break;
+//            case "26306" : Glide.with(context).load(R.drawable.espanyol).into(iv); break;
+//
+//            case "6894" : Glide.with(context).load(R.drawable.genoa).into(iv); break;
+//            case "26368" : Glide.with(context).load(R.drawable.ac_milan).into(iv); break;
+//            case "26357" : Glide.with(context).load(R.drawable.as_roma).into(iv); break;
+//            case "27038" : Glide.with(context).load(R.drawable.torino).into(iv); break;
+//            case "26359" : Glide.with(context).load(R.drawable.juventus).into(iv); break;
+//            case "26360" : Glide.with(context).load(R.drawable.udinese_calcio).into(iv); break;
+//            case "27648" : Glide.with(context).load(R.drawable.hellas_verona).into(iv); break;
+//            case "26364" : Glide.with(context).load(R.drawable.atalanta).into(iv); break;
+//            case "26361" : Glide.with(context).load(R.drawable.sampdoria).into(iv); break;
+//            case "6136" : Glide.with(context).load(R.drawable.inter_milan).into(iv); break;
+//            case "26370" : Glide.with(context).load(R.drawable.napoli).into(iv); break;
+//            case "27611" : Glide.with(context).load(R.drawable.chievo_verona).into(iv); break;
+//            case "26474" : Glide.with(context).load(R.drawable.cagliari_calcio).into(iv); break;
+//            case "113755" : Glide.with(context).load(R.drawable.spal).into(iv); break; //스팔
+//            case "38624" : Glide.with(context).load(R.drawable.crotone).into(iv); break;
+//            case "26362" : Glide.with(context).load(R.drawable.lazio).into(iv); break;
+//            case "26366" : Glide.with(context).load(R.drawable.fiorentina).into(iv); break;
+//            case "2759" : Glide.with(context).load(R.drawable.benevento_calcio).into(iv); break;
+//            case "26371" : Glide.with(context).load(R.drawable.bologna).into(iv); break;
+//            case "12345" : Glide.with(context).load(R.drawable.sassuolo_calcio).into(iv); break;
+//            default: Glide.with(context).load(R.mipmap.ic_launcher).into(iv); break;
+//
+//        }
+//
+//    }
+//
+//}
