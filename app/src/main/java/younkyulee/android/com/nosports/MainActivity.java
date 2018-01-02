@@ -4,27 +4,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import static younkyulee.android.com.nosports.IntroActivity.isFixed;
 import static younkyulee.android.com.nosports.IntroActivity.mDatas;
@@ -36,7 +23,6 @@ public class MainActivity extends CustomActivity {
     ImageView iv_empty;
     FrameLayout fm_empty;
     Tracker mTracker;
-    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +40,6 @@ public class MainActivity extends CustomActivity {
 
     private void initElement() {
         li = (LinearLayout) findViewById(R.id.li_main);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-
     }
 
     private void initRecyclerView() {
@@ -107,7 +91,7 @@ public class MainActivity extends CustomActivity {
         }
 
         //2. 아답터생성하기
-        CustomRecyclerViewAdapter rca = new CustomRecyclerViewAdapter(mDatas, R.layout.vursurs_card, mTracker, mStorageRef);
+        CustomRecyclerViewAdapter rca = new CustomRecyclerViewAdapter(mDatas, R.layout.vursurs_card, mTracker);
 
         //3. 리사이클러 뷰에 아답터 세팅하기
         rv_match_list.setAdapter(rca);

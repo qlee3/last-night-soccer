@@ -17,6 +17,24 @@ public class Match {
     private String matchRound;
     private String hit;
     private String ntime;
+    private String awayImgUrl;
+    private String homeImgUrl;
+
+    public String getAwayImgUrl() {
+        return awayImgUrl;
+    }
+
+    public void setAwayImgUrl(String awayImgUrl) {
+        this.awayImgUrl = awayImgUrl;
+    }
+
+    public String getHomeImgUrl() {
+        return homeImgUrl;
+    }
+
+    public void setHomeImgUrl(String homeImgUrl) {
+        this.homeImgUrl = homeImgUrl;
+    }
 
     public String getNtime() {
         return ntime;

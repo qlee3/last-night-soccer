@@ -3,7 +3,6 @@ package younkyulee.android.com.nosports;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,9 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -34,13 +30,11 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     Context context;
     Intent intent;
     Tracker mTracker;
-    private StorageReference mStorageRef;
 
-    public CustomRecyclerViewAdapter(ArrayList<Match> datas, int itemLayout, Tracker mTracker, StorageReference mStorageRef ) {
+    public CustomRecyclerViewAdapter(ArrayList<Match> datas, int itemLayout, Tracker mTracker) {
         this.datas = datas;
         this.itemLayout = itemLayout;
         this.mTracker = mTracker;
-        this.mStorageRef = mStorageRef;
     }
 
     @Override
@@ -52,20 +46,12 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
     }
 
     public void imageSetFromStorage(String teamCode, final ImageView iv) {
-        String imageName = "teamLogo/"+teamCode+".png";
 
-        mStorageRef.child(imageName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(context).load(uri).thumbnail(0.1f).into(iv);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                Glide.with(context).load(R.mipmap.ic_launcher).thumbnail(0.1f).into(iv);
-            }
-        });
+        if(teamCode == null || teamCode.equals("")) {
+            Glide.with(context).load(R.drawable.no_img).thumbnail(0.1f).into(iv);
+        }else {
+            Glide.with(context).load(Uri.parse(teamCode)).thumbnail(0.1f).into(iv);
+        }
     }
 
     // listView에서의 getview를 대체하는 함수(새로 만든 것)
@@ -80,8 +66,8 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecycl
         holder.tv_match_label.setText(match.getMatchLabel() + " " + match.getMatchRound());
         holder.tv_match_time.setText(match.getMatchTime());
 
-        imageSetFromStorage(match.getHomeTeamCode(), holder.iv_home);
-        imageSetFromStorage(match.getAwayTeamCode(), holder.iv_away);
+        imageSetFromStorage(match.getHomeImgUrl(), holder.iv_home);
+        imageSetFromStorage(match.getAwayImgUrl(), holder.iv_away);
 
         holder.iv_medal.setVisibility(View.INVISIBLE);
         if(position < 3) {
