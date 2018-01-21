@@ -1,5 +1,13 @@
 <resources>
 
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="MineCustomNalZaTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">9sp</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -26,6 +34,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/colorBora</item>
+    </style>
+
+    <style name="Widget.Design.TabLayout.newTabLayout">
+        <item name="tabTextAppearance">@color/colorBora</item>
+        <item name="android:textColor">@color/colorRightGreen</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

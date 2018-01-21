@@ -8,4 +8,9 @@
     <color name="colorBora">#35063E</color>
     <color name="colorLeftGreen">#97e34d</color>
     <color name="colorRightGreen">#3ce59a</color>
+
+    <color name="your_nonselected_text_color">#8Fffffff</color>
+    <color name="your_selected_text_color">#ffffff</color>
+
+    <color name="transparent">#00000000</color>
 </resources>

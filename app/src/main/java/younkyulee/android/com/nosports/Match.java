@@ -19,6 +19,15 @@ public class Match {
     private String ntime;
     private String awayImgUrl;
     private String homeImgUrl;
+    private String year;
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public String getAwayImgUrl() {
         return awayImgUrl;

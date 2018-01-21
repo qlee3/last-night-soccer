@@ -35,6 +35,8 @@ public class IntroActivity extends CustomActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        isFixed = false;
         setUi();
         init();
         setListener();
@@ -44,7 +46,7 @@ public class IntroActivity extends CustomActivity {
     private void init() {
         // firebase 연결
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference("Match");
+        mDatabaseReference = mFirebaseDatabase.getReference("MatchNew");
         //데이터 초기화
         mDatas.clear();
     }
