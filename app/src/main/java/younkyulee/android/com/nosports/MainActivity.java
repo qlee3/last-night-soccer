@@ -1,5 +1,9 @@
 package younkyulee.android.com.nosports;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.HitBuilders;
@@ -29,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static younkyulee.android.com.nosports.IntroActivity.isFixed;
-import static younkyulee.android.com.nosports.IntroActivity.mDatas;
+import static younkyulee.android.com.nosports.LaNaSaApplication.mDatas;
 
 public class MainActivity extends CustomActivity {
 
@@ -67,6 +72,14 @@ public class MainActivity extends CustomActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 앱이 튕겼을 경우 재시작
+        if(mDatas == null) {
+            Intent mainIntent = new Intent(MainActivity.this, IntroActivity.class);
+            this.startActivity(mainIntent);
+            this.finish();
+        }
+
 
         //트래커 초기화
         LaNaSaApplication application = (LaNaSaApplication) getApplication();

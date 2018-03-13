@@ -1,6 +1,7 @@
 package younkyulee.android.com.nosports;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -69,40 +70,57 @@ public class TabFragment extends Fragment {
 
         rv_match_list = (RecyclerView) view.findViewById(R.id.rv_match_list);
 
-        if (datas.size() <= 0 || isFixed) {
+        try {
 
-            mTracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("경기 없음")
-                    .setAction("")
-                    .build());
-
-            rv_match_list.setVisibility(View.GONE);
-            fm_empty = (FrameLayout) view.findViewById(R.id.fm_empty);
-            iv_empty = (ImageView) view.findViewById(R.id.iv_empty);
-            fm_empty.setVisibility(View.VISIBLE);
-
-            DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
-            int width = dm.widthPixels;
-            int height = dm.heightPixels;
-            if ((double) width / height < (double) 1440 / 2392) {
-                Glide.with(this).load(R.drawable.empty_daily).into(iv_empty);
-            } else {
-                Glide.with(this).load(R.drawable.empty_daily).into(iv_empty);
+            // 앱이 튕겼을 경우 재시작
+            if(datas == null) {
+                Intent mainIntent = new Intent(getActivity().getApplicationContext(), IntroActivity.class);
+                this.startActivity(mainIntent);
+                getActivity().finish();
             }
 
-            return view;
+            if (datas.size() <= 0 || isFixed) {
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("경기 없음")
+                        .setAction("")
+                        .build());
+
+                rv_match_list.setVisibility(View.GONE);
+                fm_empty = (FrameLayout) view.findViewById(R.id.fm_empty);
+                iv_empty = (ImageView) view.findViewById(R.id.iv_empty);
+                fm_empty.setVisibility(View.VISIBLE);
+
+                DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
+                int width = dm.widthPixels;
+                int height = dm.heightPixels;
+                if ((double) width / height < (double) 1440 / 2392) {
+                    Glide.with(this).load(R.drawable.empty_daily).into(iv_empty);
+                } else {
+                    Glide.with(this).load(R.drawable.empty_daily).into(iv_empty);
+                }
+
+                return view;
+            }
+
+            if(!isFixed) {
+                //2. 아답터생성하기
+                CustomRecyclerViewAdapter rca = new CustomRecyclerViewAdapter(datas, R.layout.vursurs_card, mTracker);
+
+                //3. 리사이클러 뷰에 아답터 세팅하기
+                rv_match_list.setAdapter(rca);
+
+                //4. 리사이클러 뷰 매니저 등록하기(뷰의 모양을 결정 : 그리드, 일반리스트, 비대칭그리드)
+                rv_match_list.setLayoutManager(new LinearLayoutManager(getContext()));
+            }
+
+        }catch (Exception e) {
+            Intent mainIntent = new Intent(getActivity().getApplicationContext(), IntroActivity.class);
+            this.startActivity(mainIntent);
+            getActivity().finish();
         }
 
-        if(!isFixed) {
-            //2. 아답터생성하기
-            CustomRecyclerViewAdapter rca = new CustomRecyclerViewAdapter(datas, R.layout.vursurs_card, mTracker);
 
-            //3. 리사이클러 뷰에 아답터 세팅하기
-            rv_match_list.setAdapter(rca);
-
-            //4. 리사이클러 뷰 매니저 등록하기(뷰의 모양을 결정 : 그리드, 일반리스트, 비대칭그리드)
-            rv_match_list.setLayoutManager(new LinearLayoutManager(getContext()));
-        }
 
         return view;
     }

@@ -19,13 +19,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import static younkyulee.android.com.nosports.LaNaSaApplication.mDatas;
+
 public class IntroActivity extends CustomActivity {
 
     private Intent intent;
     private final int SPLASHTIME = 1000;
     private ImageView iv;
 
-    public static ArrayList<Match> mDatas = new ArrayList<>();
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ValueEventListener mValueEventListener;
@@ -48,6 +49,11 @@ public class IntroActivity extends CustomActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("MatchNew");
         //데이터 초기화
+
+        if(mDatas == null) {
+            mDatas = new ArrayList<>();
+        }
+
         mDatas.clear();
     }
 

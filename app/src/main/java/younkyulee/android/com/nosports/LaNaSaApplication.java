@@ -12,10 +12,13 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.tsengvn.typekit.Typekit;
 
+import java.util.ArrayList;
+
 public class LaNaSaApplication extends Application {
 
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
+    public static ArrayList<Match> mDatas = new ArrayList<>();
 
     @Override
     public void onCreate() {
